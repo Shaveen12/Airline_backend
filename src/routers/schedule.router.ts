@@ -6,7 +6,7 @@ const router = Router();
 router.get("/full", async (req, res) => {
   try {
     const [rows] = await connection.query("CALL GetFutureSchedule()");
-    console.log(rows);
+    //console.log(rows);
     res.json(rows);
   } catch (err) {
     console.error(err);
@@ -17,7 +17,7 @@ router.get("/full", async (req, res) => {
 // API: Get future schedule by route using a stored procedure
 router.get("/flight/future", async (req, res) => {
   const { from, to } = req.query;
-  console.log(from, to);
+  //console.log(from, to);
 
   if (!from || !to) {
     return res
@@ -56,7 +56,7 @@ router.get('/flight/daterange', async (req, res) => {
     }
   
     try {
-      console.log(`Params: start=${start}, end=${end}, from=${from}, to=${to}`);
+      //console.log(`Params: start=${start}, end=${end}, from=${from}, to=${to}`);
       
       // Build the query with trimmed parameters
       const query = `CALL GetFutureScheduleByRouteAndDateRange('${start}', '${end}', '${from}', '${to}')`;
@@ -64,7 +64,7 @@ router.get('/flight/daterange', async (req, res) => {
   
       const [rows]: [any[], any] = await connection.query(query);
   
-      console.log('Raw rows:', JSON.stringify(rows, null, 2));
+      //console.log('Raw rows:', JSON.stringify(rows, null, 2));
   
       if (rows.length > 0 && rows[0].length > 0) {
         res.json(rows);
