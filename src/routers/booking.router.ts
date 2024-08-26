@@ -68,7 +68,10 @@ router.post('/addReservation', async (req, res) => {
     last_name,
     dob,
     gender,
-    passport_number
+    passport_number,
+    address,       // New parameter
+    state,         // New parameter
+    country        // New parameter
   } = req.body;
 
   // Ensure no undefined values are passed, use null instead
@@ -82,10 +85,13 @@ router.post('/addReservation', async (req, res) => {
     last_name ?? null,
     dob ?? null,
     gender ?? null,
-    passport_number ?? null
+    passport_number ?? null,
+    address ?? null,   
+    state ?? null,     
+    country ?? null    
   ];
 
-  const query = `CALL AddBooking(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  const query = `CALL AddBooking(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
   try {
     // Execute the stored procedure
@@ -103,5 +109,6 @@ router.post('/addReservation', async (req, res) => {
     }
   }
 });
+
   
 export default router;

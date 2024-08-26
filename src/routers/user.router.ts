@@ -19,7 +19,7 @@ router.get("/:id", async (req, res) => {
 
   try {
     const [rows]: [any[], any] = await connection.query(
-      "SELECT first_name, last_name, dob, gender, passport_number FROM user WHERE user_id = ?",
+      "SELECT email, first_name, last_name, dob, gender, passport_number, address, state, country  FROM user WHERE user_id = ?",
       [id]
     );
 
@@ -45,7 +45,7 @@ router.post("/login", async (req, res) => {
 
   try {
     const [rows]: [any[], any] = await connection.query(
-      "SELECT * FROM user WHERE email = ? AND password = ?",
+      "SELECT user_id, email, first_name, last_name, gender, dob, passport_number, address, state, country, passport_number FROM user WHERE email = ? AND password = ?",
       [email, password]
     );
 
@@ -70,14 +70,17 @@ router.post("/register", async (req, res) => {
     passport_number,
     tier,
     gender,
+    address,
+    state,
+    country
   } = req.body;
 
   // Flight count is explicitly set to 0
   const flight_count = 0;
 
   const query = `
-      INSERT INTO User (email, password, first_name, last_name, dob, passport_number, flight_count, tier, gender)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO User (email, password, first_name, last_name, dob, passport_number, flight_count, tier, gender, address, state, country)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
   const values = [
@@ -90,6 +93,9 @@ router.post("/register", async (req, res) => {
     flight_count,
     tier,
     gender,
+    address,
+    state,
+    country
   ];
 
   try {
@@ -100,6 +106,7 @@ router.post("/register", async (req, res) => {
     res.status(500).json({ message: "Failed to add user", error });
   }
 });
+
 
 router.get("/user-bookings/:user_id", async (req, res) => {
   const { user_id } = req.params;
