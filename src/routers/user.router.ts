@@ -1,9 +1,12 @@
 import { Router } from "express";
 import connection from "../db";
+import jwt from "jsonwebtoken";
+import dotenv from 'dotenv';
+import verifyToken from "../middleware/authmiddleware";
 
+dotenv.config();
 const router = Router();
 
-// Example API: Get all users
 router.get("/", async (req, res) => {
   try {
     const [rows] = await connection.query("SELECT * FROM user");
@@ -14,8 +17,9 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id",verifyToken, async (req, res) => {
   const { id } = req.params;
+  //console.log(req);
 
   try {
     const [rows]: [any[], any] = await connection.query(
@@ -50,7 +54,14 @@ router.post("/login", async (req, res) => {
     );
 
     if (rows.length) {
-      res.json(rows[0]);
+      const user = rows[0];
+      const secret = process.env.JWT_SECRET;
+      if (!secret) {
+        throw new Error("JWT_SECRET is not set");
+      }
+
+      const token = jwt.sign({user_id: user.user_id, email: user.email}, secret, {expiresIn: "1h"});
+      res.json({token, user});
     } else {
       res.status(401).send("Invalid email or password");
     }

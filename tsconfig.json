@@ -9,6 +9,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*", "src/types/custom.d.ts"],
+  "exclude": ["node_modules", "dist"],
+  "files": ["src/Types/custom.d.ts"]
 }
