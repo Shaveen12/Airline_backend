@@ -6,6 +6,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 const verifyToken = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers["authorization"];
   //console.log(req); 
+  // console.log("authheader: ", authHeader);
   if (!authHeader) {
     return res.status(403).send("A token is required for authentication");
   }
