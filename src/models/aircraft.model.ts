@@ -13,24 +13,14 @@ export const getAircraftByID = async(id:string) => {
     return rows[0];
 };
 
-interface AircraftData {
-    brand: string;
-    model: string; 
-    economy_seats: number;
-    business_seats: number;
-    platinum_seats: number;
-    purchase_date: Date;
-    manufactured_date: Date;
-  }
-  
-export const createAircraft = async (aircraftData:AircraftData)=>{
+export const createAircraft = async (aircraftData:any)=>{
     const query = `INSERT INTO Aircraft (brand,Model,economy_seats,business_seats,platinum_seats,next_service_date,last_service_date,purchase_date,manufactured_date) VALUES (?,?,?,?,?,?,?,?,?)`;
     
     const today = new Date();
     const oneMonthLater = new Date(today.setMonth(today.getMonth() + 1));
     const values = [
         aircraftData.brand,
-        aircraftData.model,
+        aircraftData.Model,
         aircraftData.economy_seats,
         aircraftData.business_seats,
         aircraftData.platinum_seats,
