@@ -11,5 +11,5 @@
   },
   "include": ["src/**/*", "src/types/custom.d.ts"],
   "exclude": ["node_modules", "dist"],
-  "files": ["src/Types/custom.d.ts"]
+  "files": ["src/types/custom.d.ts"]
 }

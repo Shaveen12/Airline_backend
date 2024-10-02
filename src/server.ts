@@ -10,6 +10,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors({ origin: '*' }));
 app.use(express.json());
+
 app.use("/user", userRouter);
 app.use("/schedule", scheduleRouter);
 app.use("/booking", bookingRouter);
