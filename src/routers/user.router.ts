@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import {
-  getUsers,
   getUser,
   loginUser,
   registerUser,
