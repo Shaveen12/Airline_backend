@@ -4,3 +4,4 @@ mysql-data/
 .env
 docker-compose.yml
 *.sql
+*.sh

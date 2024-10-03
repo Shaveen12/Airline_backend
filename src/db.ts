@@ -12,7 +12,10 @@ const connection = mysql.createPool({
   dateStrings: true,
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0
+  queueLimit: 0,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 export default connection;

@@ -1,10 +1,5 @@
 import db from '../db';
 
-export const getAllUsers = async () => {
-  const [rows] = await db.query('SELECT * FROM user');
-  return rows;
-};
-
 export const getUserById = async (id: number) => {
   const [rows]: [any[], any] = await db.query(
     `SELECT email, first_name, last_name, dob, gender, passport_number, address, state, country

@@ -11,7 +11,6 @@ import verifyToken from '../middleware/authmiddleware';
 
 const router = Router();
 
-router.get('/', getUsers);
 router.get('/:user_id', verifyToken, getUser);
 router.post('/login', loginUser);
 router.post('/register', registerUser);

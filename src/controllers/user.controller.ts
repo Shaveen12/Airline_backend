@@ -11,15 +11,6 @@ import {
 
 dotenv.config();
 
-export const getUsers = async (req: Request, res: Response) => {
-  try {
-    const users = await getAllUsers();
-    res.json(users);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Failed to retrieve users');
-  }
-};
 
 export const getUser = async (req: Request, res: Response) => {
   const { user_id } = req.params;
