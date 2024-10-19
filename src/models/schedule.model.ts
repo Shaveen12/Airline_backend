@@ -1,16 +1,5 @@
 import db from '../db';
 
-// Get full future schedule
-export const getFullFutureSchedule = async () => {
-  const [rows] = await db.query('CALL GetFutureSchedule()');
-  return rows;
-};
-
-// Get future schedule by route
-export const getFutureScheduleByRoute = async (from: string, to: string) => {
-  const [rows]: [any[], any] = await db.query('CALL GetFutureScheduleByRoute(?, ?)', [from, to]);
-  return rows;
-};
 
 // Get future schedule by route and date range
 export const getFutureScheduleByRouteAndDateRange = async (
