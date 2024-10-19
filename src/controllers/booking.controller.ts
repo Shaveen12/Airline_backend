@@ -16,14 +16,21 @@ export const getSeats = async (req: Request, res: Response) => {
     const rows = await getAvailableSeats(Number(schedule_id), ticket_type as string);
 
     if (Array.isArray(rows) && Array.isArray(rows[0])) {
-      const seatNumbers = rows[0].map((row: any) => row.seat_number);
-      res.status(200).json(seatNumbers);
+      const seatNumbers = rows[0]
+        .map((row: any) => row.seat_no)
+        .sort((a: string, b: string) => {
+          const numA = parseInt(a.replace(/\D/g, ''), 10);
+          const numB = parseInt(b.replace(/\D/g, ''), 10);
+          return numA - numB;
+        });
+
+      return res.status(200).json(seatNumbers);
     } else {
-      res.status(500).json({ message: 'Unexpected result format from database.' });
+      return res.status(500).json({ message: 'Unexpected result format from database.' });
     }
   } catch (error: any) {
     console.error('Error getting available seats:', error);
-    res.status(500).json({ message: 'Failed to get available seats', error: error.message });
+    return res.status(500).json({ message: 'Failed to get available seats', error: error.message });
   }
 };
 

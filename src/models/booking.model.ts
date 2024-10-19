@@ -2,7 +2,8 @@ import db from '../db';
 
 // Get available seats
 export const getAvailableSeats = async (schedule_id: number, ticket_type: string) => {
-  const query = `CALL GetAvailableSeats(?, ?)`;
+  console.log("Schedule_Id: ", schedule_id, " , ticket_type: ", ticket_type);
+  const query = `CALL get_available_seats(?, ?)`;
   const [rows]: [any[], any] = await db.execute(query, [schedule_id, ticket_type]);
   return rows;
 };
