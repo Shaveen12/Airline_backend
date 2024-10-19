@@ -9,30 +9,39 @@ export const getAvailableSeats = async (schedule_id: number, ticket_type: string
 };
 
 // Add a reservation
-export const addReservation = async (schedule_id: number, ticket_type: string, seat_no: number) => {
-  const query = `CALL AddReservation(?, ?, ?)`;
-  const [result] = await db.execute(query, [schedule_id, ticket_type, seat_no]);
+export const addReservation = async (schedule_id: number, seat_no: number) => {
+  const query = `CALL add_reservation(?, ?)`;
+  const [result] = await db.execute(query, [schedule_id, seat_no]);
   return result;
 };
 
 // Add a booking
 export const addBooking = async (bookingData: any) => {
-  const query = `CALL AddBooking(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-  const params = [
-    bookingData.schedule_id ?? null,
-    bookingData.user_id ?? null,
-    bookingData.date ?? null,
-    bookingData.ticket_type ?? null,
-    bookingData.seat_no ?? null,
-    bookingData.first_name ?? null,
-    bookingData.last_name ?? null,
-    bookingData.dob ?? null,
-    bookingData.gender ?? null,
-    bookingData.passport_number ?? null,
-    bookingData.address ?? null,
-    bookingData.state ?? null,
-    bookingData.country ?? null,
-  ];
+  let query;
+  let params;
+
+  if (bookingData.email) {
+    query = `CALL add_registered_booking(?, ?, ?)`;
+    params = [
+      bookingData.email ?? null,
+      bookingData.schedule_id ?? null,
+      bookingData.seat_no ?? null
+    ];
+  } 
+  else {
+    query = `CALL add_guest_booking(?, ?, ?, ?, ?, ?, ?)`;
+    params = [
+      bookingData.full_name ?? null,
+      bookingData.gender ?? null,
+      bookingData.dob ?? null,
+      bookingData.passport_number ?? null,
+      bookingData.mobile_num ?? null,
+      bookingData.schedule_id ?? null,
+      bookingData.seat_no ?? null
+    ];
+  }
+
   const [result] = await db.execute(query, params);
   return result;
 };
+

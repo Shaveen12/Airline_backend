@@ -35,14 +35,14 @@ export const getSeats = async (req: Request, res: Response) => {
 };
 
 export const createReservation = async (req: Request, res: Response) => {
-  const { schedule_id, ticket_type, seat_no } = req.body;
+  const { schedule_id, seat_no } = req.body;
 
-  if (!schedule_id || !ticket_type || !seat_no) {
+  if (!schedule_id || !seat_no) {
     return res.status(400).json({ message: 'Missing required parameters in request body' });
   }
 
   try {
-    const result = await addReservation(schedule_id, ticket_type, seat_no);
+    const result = await addReservation(schedule_id, seat_no);
     res.status(201).json({ message: 'Reservation added successfully', result });
   } catch (error: any) {
     if (error.sqlState === '45000') {
@@ -57,14 +57,7 @@ export const createReservation = async (req: Request, res: Response) => {
 export const createBooking = async (req: Request, res: Response) => {
   const bookingData = req.body;
 
-  // Validate required fields
-  const requiredFields = ['schedule_id', 'ticket_type', 'seat_no', 'first_name', 'last_name', 'dob', 'gender', 'passport_number', 'address', 'state', 'country'];
-
-  const missingFields = requiredFields.filter(field => !bookingData[field]);
-
-  if (missingFields.length > 0) {
-    return res.status(400).json({ message: `Missing required fields: ${missingFields.join(', ')}` });
-  }
+ 
 
   try {
     const result = await addBooking(bookingData);
