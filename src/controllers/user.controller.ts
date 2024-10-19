@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import {
-  getUserById,
+  getUserByEmail,
   getUserByEmailAndPassword,
   createUser,
   getUserBookings,
@@ -12,11 +12,11 @@ dotenv.config();
 
 
 export const getUser = async (req: Request, res: Response) => {
-  const { user_id } = req.params;
+  const { email } = req.params;
 //   console.log("Inside get User");
 
   try {
-    const user = await getUserById(Number(user_id));
+    const user = await getUserByEmail(email);
 
     if (user) {
       res.json(user);
@@ -76,10 +76,10 @@ export const registerUser = async (req: Request, res: Response) => {
 };
 
 export const getUserBookingsController = async (req: Request, res: Response) => {
-  const { user_id } = req.params;
+  const { email } = req.params;
 
   try {
-    const bookings = await getUserBookings(Number(user_id));
+    const bookings = await getUserBookings(email);
     res.json(bookings);
   } catch (err) {
     console.error(err);

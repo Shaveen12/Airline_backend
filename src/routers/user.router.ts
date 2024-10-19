@@ -10,9 +10,9 @@ import verifyToken from '../middleware/authmiddleware';
 
 const router = Router();
 
-router.get('/:user_id', verifyToken, getUser);
+router.get('/:email', verifyToken, getUser);
 router.post('/login', loginUser);
 router.post('/register', registerUser);
-router.get('/user-bookings/:user_id', verifyToken,  getUserBookingsController);
+router.get('/user-bookings/:email', verifyToken,  getUserBookingsController);
 
 export default router;

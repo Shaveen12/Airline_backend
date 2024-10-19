@@ -21,6 +21,7 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
     // Verify the token and attach decoded data to req.user
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload;
     req.user = decoded; // Attach the decoded token to the request
+    // console.log(req.user);
   } catch (err) {
     console.error("JWT verification failed:", err);
     return res.status(401).send("Invalid token");
