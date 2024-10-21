@@ -3,6 +3,7 @@ import connection from './db';
 import userRouter from './routers/user.router';
 import scheduleRouter from './routers/schedule.router';
 import bookingRouter from './routers/booking.router';
+import reportRouter from './routers/report.router';
 import cors from 'cors';
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use("/user", userRouter);
 app.use("/schedule", scheduleRouter);
 app.use("/booking", bookingRouter);
+app.use("/report", reportRouter);
 
 app.get('/test', async (req, res) => {
   try {
