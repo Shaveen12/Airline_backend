@@ -69,7 +69,7 @@ export const createBooking = async (req: Request, res: Response) => {
     res.status(201).json({ message: 'Booking added successfully', result });
   } catch (error: any) {
     if (error.sqlState === '45000') {
-      res.status(400).json({ message: 'Seat number is not reserved or does not exist.' });
+      res.status(400).json({ message: 'Seat number is not reserved or user is not reserved.' });
     } else {
       console.error('Error adding booking:', error);
       res.status(500).json({ message: 'Failed to add booking', error: error.message });

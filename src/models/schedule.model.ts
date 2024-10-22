@@ -8,7 +8,7 @@ export const getFutureScheduleByRouteAndDateRange = async (
   from: string,
   to: string
 ) => {
-  const query = 'CALL GetFutureScheduleByRouteAndDateRange(?, ?, ?, ?)';
+  const query = 'CALL get_future_schedule_by_route_and_date_range(?, ?, ?, ?)';
   const [rows]: [any[], any] = await db.query(query, [start, end, from, to]);
   return rows;
 };
