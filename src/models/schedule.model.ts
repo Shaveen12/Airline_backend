@@ -16,7 +16,7 @@ export const getFutureScheduleByRouteAndDateRange = async (
 // Get schedule by ID
 export const getScheduleById = async (id: number) => {
   const [rows]: [any[], any] = await db.query(
-    'SELECT * FROM schedule WHERE schedule_id = ?',
+    'SELECT * FROM schedule s JOIN route r ON s.route_id = r.route_id WHERE schedule_id = ?',
     [id]
   );
   return rows[0];

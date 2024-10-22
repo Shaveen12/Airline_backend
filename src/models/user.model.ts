@@ -34,8 +34,27 @@ export const getUserByEmail = async (email: string) => {
 
 export const getUserByEmailAndPassword = async (email: string, password: string) => {
   const [rows]: [any[], any] = await db.query(
-    `SELECT first_name, last_name, email
-     FROM user WHERE email = ? AND password = ?`,
+    `    SELECT 
+      u.passenger_id,
+      u.first_name,
+      u.last_name,
+      u.email,
+      u.password,
+      u.role,
+      p.full_name,
+      p.gender,
+      p.D_O_B as dob,
+      p.passport_number,
+      p.mobile_num,
+      p.flight_count,
+      p.tier
+    FROM 
+      user u
+    JOIN 
+      passenger_details p 
+    ON 
+      u.passenger_id = p.passenger_id
+    WHERE email = ? AND password = ?`,
     [email, password]
   );
   return rows[0];
@@ -72,7 +91,8 @@ export const getUserBookings = async (email: string) => {
       r.destination_code AS to_destination,
       s.departure_time,
       s.arrival_time,
-      r.duration
+      r.duration,
+      b.seat_no
     FROM 
       booking b
     JOIN 

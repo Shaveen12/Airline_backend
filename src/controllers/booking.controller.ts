@@ -3,6 +3,7 @@ import {
   getAvailableSeats,
   addReservation,
   addBooking,
+  getMaxSeats
 } from '../models/booking.model';
 
 export const getSeats = async (req: Request, res: Response) => {
@@ -14,6 +15,7 @@ export const getSeats = async (req: Request, res: Response) => {
 
   try {
     const rows = await getAvailableSeats(Number(schedule_id), ticket_type as string);
+    const seatMax = await getMaxSeats(Number(schedule_id), ticket_type as string);
 
     if (Array.isArray(rows) && Array.isArray(rows[0])) {
       const seatNumbers = rows[0]
@@ -24,7 +26,10 @@ export const getSeats = async (req: Request, res: Response) => {
           return numA - numB;
         });
 
-      return res.status(200).json(seatNumbers);
+      return res.status(200).json({
+        seats: seatNumbers,
+        maxSeats: seatMax.number_of_seats
+      });
     } else {
       return res.status(500).json({ message: 'Unexpected result format from database.' });
     }
