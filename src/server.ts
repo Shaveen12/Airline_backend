@@ -4,9 +4,10 @@ import userRouter from './routers/user.router';
 import scheduleRouter from './routers/schedule.router';
 import bookingRouter from './routers/booking.router';
 import cors from 'cors';
+import {config} from './config/config';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+
 
 app.use(cors({ origin: '*' }));
 app.use(express.json());
@@ -27,6 +28,6 @@ app.get('/test', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(config.server.port, () => {
+  console.log(`Server is running on port ${config.server.port}`);
 });
