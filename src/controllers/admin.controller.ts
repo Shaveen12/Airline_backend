@@ -5,6 +5,7 @@ import {
   bookingsByTierQuery,
   flightsFromSourceToDestinationQuery,
   revenueByAircraftModelQuery,
+  adminLoginQuery,
 } from "../models/admin.model";
 
 export const report1 = async (req: Request, res: Response) => {
@@ -145,6 +146,48 @@ export const report5 = async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: "An error occurred while generating report 5",
+      error: error.message, // Include the error message for debugging
+    });
+  }
+};
+
+export const adminLogin = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
+
+    // Validate input
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Email and password are required",
+      });
+    }
+
+    // Call the model method to check for admin login
+    const adminUser = await adminLoginQuery(email, password);
+
+    if (adminUser) {
+      res.status(200).json({
+        success: true,
+        message: "Login successful",
+        data: {
+          first_name: adminUser.first_name,
+          last_name: adminUser.last_name,
+          email: adminUser.email,
+          role: adminUser.role,
+        },
+      });
+    } else {
+      res.status(401).json({
+        success: false,
+        message: "Invalid email or password",
+      });
+    }
+  } catch (error: any) {
+    console.error("Error during admin login:", error);
+    res.status(500).json({
+      success: false,
+      message: "An error occurred during login",
       error: error.message, // Include the error message for debugging
     });
   }

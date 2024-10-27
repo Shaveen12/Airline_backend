@@ -146,4 +146,28 @@ export const revenueByAircraftModelQuery = async () => {
       throw error;
     }
   };
+
+  export const adminLoginQuery = async (email: any, password: any) => {
+    try {
+      const loginQuery = `
+        SELECT first_name, last_name, email, role 
+        FROM user 
+        WHERE email = ? AND password = ? AND role = 'admin';
+      `;
+  
+      // Execute the query with email and password as parameters
+      const [result]: [any[], any] = await db.query(loginQuery, [email, password]);
+  
+      // Check if a user was found
+      if (result.length > 0) {
+        return result[0]; // Return the user data if login is successful
+      } else {
+        return null; // Return null if no matching admin user is found
+      }
+    } catch (error) {
+      console.error("Error in adminLoginQuery:", error);
+      throw error;
+    }
+  };
+  
   
