@@ -4,6 +4,7 @@ import {
   passengerCountForDestinationQuery,
   bookingsByTierQuery,
   flightsFromSourceToDestinationQuery,
+  revenueByAircraftModelQuery,
 } from "../models/admin.model";
 
 export const report1 = async (req: Request, res: Response) => {
@@ -131,19 +132,20 @@ export const report4 = async (req: Request, res: Response) => {
 
 export const report5 = async (req: Request, res: Response) => {
   try {
-    // TODO: Call the appropriate model method to generate report4
-    // const report = await SomeModel.generateReport4(req.body);
+    // Call the model method to get revenue by aircraft model
+    const report = await revenueByAircraftModelQuery();
 
     res.status(200).json({
       success: true,
-      message: "Report 4 generated successfully",
-      // data: report
+      message: "Report 5 generated successfully",
+      data: report,
     });
-  } catch (error) {
-    console.error("Error generating report 4:", error);
+  } catch (error: any) {
+    console.error("Error generating report 5:", error);
     res.status(500).json({
       success: false,
-      message: "An error occurred while generating report 4",
+      message: "An error occurred while generating report 5",
+      error: error.message, // Include the error message for debugging
     });
   }
 };

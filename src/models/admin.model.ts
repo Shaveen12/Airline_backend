@@ -126,3 +126,24 @@ export const flightsFromSourceToDestinationQuery = async (
     throw error;
   }
 };
+
+export const revenueByAircraftModelQuery = async () => {
+    try {
+      const revenueQuery = `
+        SELECT aircraft.model AS aircraft_model, SUM(booking.ticket_price) AS total_revenue
+        FROM booking 
+        JOIN schedule ON booking.schedule_id = schedule.schedule_id
+        JOIN aircraft ON schedule.aircraft_id = aircraft.aircraft_id
+        GROUP BY aircraft.model;
+      `;
+  
+      // Execute the query
+      const [result] = await db.query(revenueQuery);
+  
+      return result;
+    } catch (error) {
+      console.error("Error in revenueByAircraftModelQuery:", error);
+      throw error;
+    }
+  };
+  
