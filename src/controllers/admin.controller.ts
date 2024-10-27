@@ -3,6 +3,7 @@ import {
   flightNumberAgeQuery,
   passengerCountForDestinationQuery,
   bookingsByTierQuery,
+  flightsFromSourceToDestinationQuery,
 } from "../models/admin.model";
 
 export const report1 = async (req: Request, res: Response) => {
@@ -97,13 +98,27 @@ export const report3 = async (req: Request, res: Response) => {
 
 export const report4 = async (req: Request, res: Response) => {
   try {
-    // TODO: Call the appropriate model method to generate report4
-    // const report = await SomeModel.generateReport4(req.body);
+    // Extract source and destination codes from request query parameters
+    const { sourceCode, destinationCode } = req.query;
+
+    // Validate parameters
+    if (!sourceCode || !destinationCode) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide both sourceCode and destinationCode",
+      });
+    }
+
+    // Call the model method with source and destination
+    const report = await flightsFromSourceToDestinationQuery(
+      sourceCode,
+      destinationCode
+    );
 
     res.status(200).json({
       success: true,
       message: "Report 4 generated successfully",
-      // data: report
+      data: report,
     });
   } catch (error) {
     console.error("Error generating report 4:", error);

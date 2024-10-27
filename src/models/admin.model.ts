@@ -92,3 +92,37 @@ export const bookingsByTierQuery = async (startDate: any, endDate: any) => {
     throw error;
   }
 };
+
+export const flightsFromSourceToDestinationQuery = async (
+  sourceCode: any,
+  destinationCode: any
+) => {
+  console.log("source code:", sourceCode);
+  console.log("destination code:", destinationCode);
+
+  try {
+    const flightsQuery = `
+        SELECT schedule.flight_number, schedule.status, COUNT(booking.passenger_id) AS passenger_count
+        FROM schedule 
+        JOIN route ON schedule.route_id = route.route_id
+        LEFT JOIN booking ON schedule.schedule_id = booking.schedule_id
+        WHERE route.source_code = ? AND route.destination_code = ? 
+        AND schedule.departure_time < CURRENT_TIMESTAMP
+        GROUP BY schedule.schedule_id
+        ORDER BY schedule.departure_time DESC;
+      `;
+
+
+    // Execute the query with source and destination codes as parameters
+    const [result] = await db.query(flightsQuery, [
+      sourceCode,
+      destinationCode,
+    ]);
+    console.log("result: ", result);
+
+    return result;
+  } catch (error) {
+    console.error("Error in flightsFromSourceToDestinationQuery:", error);
+    throw error;
+  }
+};
