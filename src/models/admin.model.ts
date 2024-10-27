@@ -37,3 +37,30 @@ export const flightNumberAgeQuery = async (flightNumber: string) => {
     throw error;
   }
 };
+
+export const passengerCountForDestinationQuery = async (destinationCode: any, startDate: any, endDate: any) => {
+    try {
+      const passengerCountQuery = `
+        SELECT COUNT(DISTINCT booking.passenger_id) AS no_of_passengers
+        FROM booking 
+        JOIN schedule ON booking.schedule_id = schedule.schedule_id 
+        JOIN route ON schedule.route_id = route.route_id
+        WHERE route.destination_code = ? 
+        AND schedule.departure_time BETWEEN ? AND ?;
+      `;
+  
+      // Execute the query with the provided parameters
+      const [result]: [any[], any] = await db.query(passengerCountQuery, [destinationCode, startDate, endDate]);
+  
+      return {
+        destinationCode,
+        startDate,
+        endDate,
+        no_of_passengers: result[0]?.no_of_passengers || 0,
+      };
+    } catch (error) {
+      console.error("Error in passengerCountForDestinationQuery:", error);
+      throw error;
+    }
+  };
+  
