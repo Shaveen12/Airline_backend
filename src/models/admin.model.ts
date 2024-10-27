@@ -38,9 +38,13 @@ export const flightNumberAgeQuery = async (flightNumber: string) => {
   }
 };
 
-export const passengerCountForDestinationQuery = async (destinationCode: any, startDate: any, endDate: any) => {
-    try {
-      const passengerCountQuery = `
+export const passengerCountForDestinationQuery = async (
+  destinationCode: any,
+  startDate: any,
+  endDate: any
+) => {
+  try {
+    const passengerCountQuery = `
         SELECT COUNT(DISTINCT booking.passenger_id) AS no_of_passengers
         FROM booking 
         JOIN schedule ON booking.schedule_id = schedule.schedule_id 
@@ -48,19 +52,43 @@ export const passengerCountForDestinationQuery = async (destinationCode: any, st
         WHERE route.destination_code = ? 
         AND schedule.departure_time BETWEEN ? AND ?;
       `;
-  
-      // Execute the query with the provided parameters
-      const [result]: [any[], any] = await db.query(passengerCountQuery, [destinationCode, startDate, endDate]);
-  
-      return {
-        destinationCode,
-        startDate,
-        endDate,
-        no_of_passengers: result[0]?.no_of_passengers || 0,
-      };
-    } catch (error) {
-      console.error("Error in passengerCountForDestinationQuery:", error);
-      throw error;
-    }
-  };
-  
+
+    // Execute the query with the provided parameters
+    const [result]: [any[], any] = await db.query(passengerCountQuery, [
+      destinationCode,
+      startDate,
+      endDate,
+    ]);
+
+    return {
+      destinationCode,
+      startDate,
+      endDate,
+      no_of_passengers: result[0]?.no_of_passengers || 0,
+    };
+  } catch (error) {
+    console.error("Error in passengerCountForDestinationQuery:", error);
+    throw error;
+  }
+};
+
+export const bookingsByTierQuery = async (startDate: any, endDate: any) => {
+  try {
+    const tierBookingsQuery = `
+        SELECT passenger_details.tier, COUNT(booking.booking_id) AS no_of_bookings
+        FROM booking 
+        JOIN passenger_details ON booking.passenger_id = passenger_details.passenger_id 
+        JOIN schedule ON booking.schedule_id = schedule.schedule_id
+        WHERE schedule.departure_time BETWEEN ? AND ?
+        GROUP BY passenger_details.tier;
+      `;
+
+    // Execute the query with the date range as parameters
+    const [result] = await db.query(tierBookingsQuery, [startDate, endDate]);
+
+    return result;
+  } catch (error) {
+    console.error("Error in bookingsByTierQuery:", error);
+    throw error;
+  }
+};
