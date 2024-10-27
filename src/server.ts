@@ -3,6 +3,7 @@ import connection from './db';
 import userRouter from './routers/user.router';
 import scheduleRouter from './routers/schedule.router';
 import bookingRouter from './routers/booking.router';
+import adminRouter from './routers/admin.router'
 import cors from 'cors';
 import {config} from './config/config';
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use("/user", userRouter);
 app.use("/schedule", scheduleRouter);
 app.use("/booking", bookingRouter);
+app.use("/admin", adminRouter);
 
 app.get('/test', async (req, res) => {
   try {
