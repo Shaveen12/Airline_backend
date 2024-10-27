@@ -62,7 +62,7 @@ export const getUserByEmailAndPassword = async (email: string, password: string)
 
 export const createUser = async (userData: any) => {
   const query = `
-    CALL register_user(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    CALL register_user(?, ?, ?, ?, ?, ?, ?, ?, ?);
   `;
 
   const values = [
@@ -71,12 +71,10 @@ export const createUser = async (userData: any) => {
     userData.dob,                                   
     userData.passport_number,                       
     userData.mobile_num,                            
-    'Frequent',
     userData.first_name,                            
     userData.last_name,                             
     userData.email,                                 
-    userData.password,                              
-    'passenger'                                     
+    userData.password,                                                                 
   ];
 
   const [result] = await db.execute(query, values);
