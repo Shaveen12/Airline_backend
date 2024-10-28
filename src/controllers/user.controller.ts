@@ -13,7 +13,9 @@ dotenv.config();
 
 export const getUser = async (req: Request, res: Response) => {
   const { email } = req.params;
-//   console.log("Inside get User");
+  //console.log("Inside get User");
+
+  // console.log("User:", req.user)
 
   try {
     const user = await getUserByEmail(email);
