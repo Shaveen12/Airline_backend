@@ -1,9 +1,20 @@
 import db from "../db";
+import { RowDataPacket } from 'mysql2/promise';
+
+export const getAllFlights = async (): Promise<RowDataPacket[]> => {
+  const query = `
+  SELECT schedule_id, departure_time, arrival_time, flight_number
+  FROM schedule
+  WHERE departure_time > NOW();
+  `;
+  const [rows] = await db.query<RowDataPacket[]>(query);
+  return rows;
+}
 
 export const flightNumberAgeQuery = async (flightNumber: string) => {
   try {
     const adultQuery = `
-      SELECT passenger_details.passenger_id, passenger_details.full_name, passenger_details.gender, passenger_details.D_O_B, passenger_details.passport_number, passenger_details.flight_count, passenger_details.tier
+      SELECT  passenger_details.full_name, passenger_details.gender, passenger_details.D_O_B, passenger_details.flight_count, passenger_details.tier
       FROM booking 
       LEFT JOIN passenger_details ON passenger_details.passenger_id = booking.passenger_id
       LEFT JOIN schedule ON schedule.schedule_id = booking.schedule_id
@@ -160,6 +171,7 @@ export const revenueByAircraftModelQuery = async () => {
   
       // Check if a user was found
       if (result.length > 0) {
+        // console.log("results :",result[0])
         return result[0]; // Return the user data if login is successful
       } else {
         return null; // Return null if no matching admin user is found
@@ -170,4 +182,5 @@ export const revenueByAircraftModelQuery = async () => {
     }
   };
   
+
   

@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import jwt from 'jsonwebtoken';
 import {
   flightNumberAgeQuery,
   passengerCountForDestinationQuery,
@@ -6,7 +7,19 @@ import {
   flightsFromSourceToDestinationQuery,
   revenueByAircraftModelQuery,
   adminLoginQuery,
+  getAllFlights,
 } from "../models/admin.model";
+
+export const getFlightReport = async (req: Request, res: Response) => {
+  console.log('Request body:', req.body); // For debugging
+  try {
+    const flights = await getAllFlights();
+    res.json(flights);
+  } catch (err) {
+    console.error('Error fetching flight reports:', err);
+    res.status(500).send('An error occurred while retrieving flight reports');
+  }
+} 
 
 export const report1 = async (req: Request, res: Response) => {
   try {
@@ -21,6 +34,7 @@ export const report1 = async (req: Request, res: Response) => {
 
     const report = await flightNumberAgeQuery(flightNumber);
 
+    console.log("report",report)
     res.status(200).json({
       success: true,
       message: "Report 1 generated successfully",
@@ -53,6 +67,8 @@ export const report2 = async (req: Request, res: Response) => {
       startDate,
       endDate
     );
+
+    console.log("report",report)
 
     res.status(200).json({
       success: true,
@@ -154,6 +170,8 @@ export const report5 = async (req: Request, res: Response) => {
 export const adminLogin = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
+    console.log('Received request to /admin/adminlogin');
+    console.log('Request body:', req.body);
 
     // Validate input
     if (!email || !password) {
@@ -166,10 +184,25 @@ export const adminLogin = async (req: Request, res: Response) => {
     // Call the model method to check for admin login
     const adminUser = await adminLoginQuery(email, password);
 
+    console.log("admin : ", adminUser)
+
     if (adminUser) {
+      const secret = process.env.JWT_SECRET; // Make sure your JWT_SECRET is set in the environment
+      if (!secret) {
+        throw new Error('JWT_SECRET is not set');
+      }
+
+      // Generate JWT token
+      const token = jwt.sign(
+        { email: adminUser.email, role: adminUser.role }, // Include role if needed
+        secret,
+        { expiresIn: '1h' }
+      );
+
       res.status(200).json({
         success: true,
         message: "Login successful",
+        token, // Include the token in the response
         data: {
           first_name: adminUser.first_name,
           last_name: adminUser.last_name,
