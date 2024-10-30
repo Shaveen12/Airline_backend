@@ -1,4 +1,4 @@
-import db from '../db';
+import db from "../db";
 
 export const getUserByEmail = async (email: string) => {
   const query = `
@@ -31,8 +31,10 @@ export const getUserByEmail = async (email: string) => {
   return rows[0]; // Return the first row (since email is unique, there should only be one match)
 };
 
-
-export const getUserByEmailAndPassword = async (email: string, password: string) => {
+export const getUserByEmailAndPassword = async (
+  email: string,
+  password: string
+) => {
   const [rows]: [any[], any] = await db.query(
     `    SELECT 
       u.passenger_id,
@@ -66,15 +68,15 @@ export const createUser = async (userData: any) => {
   `;
 
   const values = [
-    userData.first_name + ' ' + userData.last_name, 
-    userData.gender,                                
-    userData.dob,                                   
-    userData.passport_number,                       
-    userData.mobile_num,                            
-    userData.first_name,                            
-    userData.last_name,                             
-    userData.email,                                 
-    userData.password,                                                                 
+    userData.first_name + " " + userData.last_name,
+    userData.gender,
+    userData.dob,
+    userData.passport_number,
+    userData.mobile_num,
+    userData.first_name,
+    userData.last_name,
+    userData.email,
+    userData.password,
   ];
 
   const [result] = await db.execute(query, values);
@@ -106,4 +108,23 @@ export const getUserBookings = async (email: string) => {
   const [rows] = await db.query(query, [email]);
 
   return rows;
+};
+
+export const getTierByEmail = async (email: string) => {
+  const query = `
+  SELECT 
+    pd.tier 
+  FROM 
+    user u 
+  JOIN 
+    passenger_details pd ON u.passenger_id = pd.passenger_id 
+  WHERE 
+    u.email = ?;
+`;
+
+  const [rows]: [any[], any] = await db.query(query, [email]);
+
+  // console.log("rows: ", rows[0]);
+
+  return rows[0];
 };

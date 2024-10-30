@@ -6,6 +6,7 @@ import {
   getUserByEmailAndPassword,
   createUser,
   getUserBookings,
+  getTierByEmail
 } from '../models/user.model';
 
 dotenv.config();
@@ -96,7 +97,7 @@ export const tierCheck = async (req: Request, res: Response) => {
   // console.log("User:", req.user)
 
   try {
-    const user = await getUserByEmail(email);
+    const user = await getTierByEmail(email);
 
     if (user) {
       res.json(user);
