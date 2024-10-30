@@ -33,3 +33,7 @@ app.get('/test', async (req, res) => {
 app.listen(config.server.port, () => {
   console.log(`Server is running on porttt ${config.server.port} on herokuuu`);
 });
+
+app.get('/', (req, res) => {
+  res.send('Hello World');
+});
