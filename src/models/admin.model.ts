@@ -56,7 +56,7 @@ export const passengerCountForDestinationQuery = async (
 ) => {
   try {
     const passengerCountQuery = `
-        SELECT COUNT(DISTINCT booking.passenger_id) AS no_of_passengers
+        SELECT COUNT(booking.passenger_id) AS no_of_passengers
         FROM booking 
         JOIN schedule ON booking.schedule_id = schedule.schedule_id 
         JOIN route ON schedule.route_id = route.route_id
