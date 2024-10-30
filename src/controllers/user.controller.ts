@@ -88,3 +88,23 @@ export const getUserBookingsController = async (req: Request, res: Response) => 
     res.status(500).send('Failed to retrieve user bookings');
   }
 };
+
+export const tierCheck = async (req: Request, res: Response) => {
+  const { email } = req.params;
+  //console.log("Inside get User");
+
+  // console.log("User:", req.user)
+
+  try {
+    const user = await getUserByEmail(email);
+
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).send('User not found');
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Failed to retrieve user');
+  }
+};

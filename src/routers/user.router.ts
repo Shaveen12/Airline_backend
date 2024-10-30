@@ -4,6 +4,7 @@ import {
   loginUser,
   registerUser,
   getUserBookingsController,
+  tierCheck
 } from '../controllers/user.controller';
 
 import verifyToken from '../middleware/authmiddleware';
@@ -11,6 +12,7 @@ import verifyToken from '../middleware/authmiddleware';
 const router = Router();
 
 router.get('/:email', verifyToken, getUser);
+router.get('/email/:email', tierCheck)
 router.post('/login', loginUser);
 router.post('/register', registerUser);
 router.get('/user-bookings/:email', verifyToken,  getUserBookingsController);
