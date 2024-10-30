@@ -18,17 +18,6 @@ app.use("/schedule", scheduleRouter);
 app.use("/booking", bookingRouter);
 app.use("/admin", adminRouter);
 
-app.get('/test', async (req, res) => {
-  try {
-    const [rows, fields] = await connection.query('CALL AddReservation(1, "Economy", 2)');
-    console.log("ROws", rows);
-    console.log("Fields", fields);
-    res.json(rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Database query failed');
-  }
-});
 
 app.listen(config.server.port, () => {
   console.log(`Server is running on porttt ${config.server.port} on herokuuu`);
